@@ -18,8 +18,11 @@ ENDPOINTS
 - POST /libros
   Permite agregar un nuevo libro enviando sus datos (título, autor, año, género, disponibilidad).
 
-- PUT /libros/{id}
-  Actualiza los datos de un libro existente según su ID.
+- PUT /libros/{id}  
+  Actualiza todos los datos de un libro existente según su ID.  
+
+- PATCH /libros/{id}  
+  Actualiza uno o varios campos de un libro existente según su ID.
 
 - DELETE /libros/{id}
   Elimina un libro del catálogo según su ID.
