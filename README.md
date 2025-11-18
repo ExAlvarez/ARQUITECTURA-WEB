@@ -2,7 +2,7 @@
 
 API REST básica para gestión de libros. Incluye endpoints CRUD, healthcheck, Docker y CI/CD con GitHub Actions.
 
-## Comandos principales
+## Comandos de ejecución
 
 ```bash
 - npm install    # Instala dependencias
