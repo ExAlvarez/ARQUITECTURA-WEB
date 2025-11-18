@@ -5,13 +5,13 @@ API REST básica para gestión de libros. Incluye endpoints CRUD, healthcheck, D
 ## Comandos principales
 
 ```bash
-npm install    # Instala dependencias
-npm test       # Ejecuta los tests
-npm start      # Inicia el servidor en http://localhost:3000
-docker-compose up --build  # Ejecuta la app en contenedor
+- npm install    # Instala dependencias
+- npm test       # Ejecuta los tests
+- npm start      # Inicia el servidor en http://localhost:3000
+- docker-compose up --build  # Ejecuta la app en contenedor
 ```
 
-Endpoints principales:
+## Endpoints principales:
 - GET /health
 - GET /libros
 - GET /libros/:id
@@ -19,3 +19,18 @@ Endpoints principales:
 - PUT /libros/:id
 - PATCH /libros/:id
 - DELETE /libros/:id
+
+
+## Endpoints de Autores
+
+- GET /autores
+- GET /autores/:id
+- POST /autores
+- PUT /autores/:id
+- PATCH /autores/:id
+- DELETE /autores/:id
+
+## Cruce de datos
+
+- GET /autores/:id/libros  → devuelve todos los libros escritos por ese autor
+    (curl http://localhost:3000/libros/autor/1)

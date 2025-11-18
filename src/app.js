@@ -1,9 +1,10 @@
-// src/app.js - VERSIÓN FINAL CORREGIDA
 const express = require('express');
 const app = express();
-const librosRoutes = require('./routes/libros');
 
-// 1. Declarar Sentry y Tracing (Fuera de cualquier 'if' para evitar 'not defined')
+const librosRoutes = require('./routes/libros');
+const autoresRoutes = require('./routes/autores');
+
+// ----------- SENTRY ----------- ( 1. Declarar Sentry y Tracing (Fuera de cualquier 'if' para evitar 'not defined')
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 
@@ -13,7 +14,7 @@ if (process.env.SENTRY_DSN) {
     dsn: process.env.SENTRY_DSN,
     integrations: [
       new Sentry.Integrations.Http({ tracing: true }),
-      new Tracing.Integrations.Express({ app }), // Ahora Tracing está definido
+      new Tracing.Integrations.Express({ app }),
     ],
     tracesSampleRate: 1.0,
   });
@@ -25,30 +26,33 @@ if (process.env.SENTRY_DSN) {
 
 app.use(express.json());
 
-// Ruta de prueba de error
-app.get('/error-test', (req, res) => {
+// Test Sentry (Ruta de prueba de error)
+app.get('/error-test', () => {
   throw new Error("¡Error forzado de Sentry!");
 });
 
-app.get('/health', (req, res) => res.send('OK'));
-app.use('/libros', librosRoutes);
+app.get('/health', (req, res) => res.json({ status: 'OK' }));
 
+// Rutas
+app.use('/libros', librosRoutes);
+app.use('/autores', autoresRoutes);
 
 // 4. Middlewares de Manejo de Errores (DEBEN ir ANTES del 'module.exports')
-
 // Sentry solo se usa aquí si fue inicializado arriba
 if (process.env.SENTRY_DSN) {
   app.use(Sentry.Handlers.errorHandler());
 }
 
-// Middleware genérico final para 404/otros errores no atrapados
 app.use((req, res, next) => {
-  res.status(404).send("Ruta no encontrada");
+  res.status(404).json({ error: "Ruta no encontrada" });
 });
+// ------------------------------------------
 
 module.exports = app;
 
+// Ejecutar servidor solo si se llama directamente
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
 }
+
